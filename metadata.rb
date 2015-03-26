@@ -1,0 +1,7 @@
+name             'chef-tefenua-frontal'
+maintainer       'YOUR_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures chef-tefenua-frontal'
+long_description 'Installs/Configures chef-tefenua-frontal'
+version          '0.1.0'
