@@ -73,9 +73,12 @@ package 'subversion' do
    action :install
 end
 
-directory node['tomcat']['webapp_dir'] + '/tefenua' do
-   owner "#{node['tomcat']['user']}"
-   group "#{node['tomcat']['group']}"
+#directory node['tomcat']['webapp_dir'] + '/tefenua' do
+directory '/var/lib/tomcat7/webapps/tefenua' do
+   #owner "#{node['tomcat']['user']}"
+   owner "tomcat7"
+   #group "#{node['tomcat']['group']}"
+   group "tomcat7"
    mode '0755'
    action :create
    recursive true
@@ -85,19 +88,19 @@ subversion "tefenua" do
     repository "#{node['chef-tefenua-frontal']['frontal_svn_link']}"
     revision "HEAD"
     #destination "#{node['tomcat']['webapp_dir']}" + "/" + "tefenua"
-    destination "/var/lib/tomcat7" + "/" + "tefenua"
+    destination "/var/lib/tomcat7/webapps" + "/" + "tefenua"
     svn_username "#{node['chef-tefenua-frontal']['user_svn']}"
     svn_password "#{node['chef-tefenua-frontal']['passwd_svn']}"
     action :sync
 end
 
 #chmod = "chown -R #{node['tomcat']['user']}:#{node['tomcat']['group']} #{node['tomcat']['webapp_dir']}" + "/tefenua"
-chmod = "chown -R tomcat7:tomcat7 /var/lib/tomcat7/tefenua"
+chmod = "chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/tefenua"
 
 bash 'chown_tefenua_directory' do
    user 'root'
    #cwd "#{node['tomcat']['webapp_dir']}" + "/" + "tefenua"
-   cwd "/var/lib/tomcat7/tefenua"
+   cwd "/var/lib/tomcat7/webapps/tefenua"
    code <<-EOH
       #{chmod}
    EOH
