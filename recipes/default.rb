@@ -84,17 +84,20 @@ end
 subversion "tefenua" do
     repository "#{node['chef-tefenua-frontal']['frontal_svn_link']}"
     revision "HEAD"
-    destination "#{node['tomcat']['webapp_dir']}" + "/" + "tefenua"
+    #destination "#{node['tomcat']['webapp_dir']}" + "/" + "tefenua"
+    destination "/var/lib/tomcat7" + "/" + "tefenua"
     svn_username "#{node['chef-tefenua-frontal']['user_svn']}"
     svn_password "#{node['chef-tefenua-frontal']['passwd_svn']}"
     action :sync
 end
 
-chmod = "chown -R #{node['tomcat']['user']}:#{node['tomcat']['group']} #{node['tomcat']['webapp_dir']}" + "/tefenua"
+#chmod = "chown -R #{node['tomcat']['user']}:#{node['tomcat']['group']} #{node['tomcat']['webapp_dir']}" + "/tefenua"
+chmod = "chown -R tomcat7:tomcat7 /var/lib/tomcat7/tefenua"
 
 bash 'chown_tefenua_directory' do
    user 'root'
-   cwd "#{node['tomcat']['webapp_dir']}" + "/" + "tefenua"
+   #cwd "#{node['tomcat']['webapp_dir']}" + "/" + "tefenua"
+   cwd "/var/lib/tomcat7/tefenua"
    code <<-EOH
       #{chmod}
    EOH
