@@ -11,28 +11,41 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  config.vm.hostname = 'chef-tefenua-frontal-berkshelf'
+  config.vm.hostname = 'chef-tefenua-berkshelf'
 
   # Set the version of chef to install using the vagrant-omnibus plugin
   # NOTE: You will need to install the vagrant-omnibus plugin:
   #
   #   $ vagrant plugin install vagrant-omnibus
   #
-  if Vagrant.has_plugin?
-    config.omnibus.chef_version = 'latest'
-  end
+  #if Vagrant.has_plugin?
+  #  config.omnibus.chef_version = 'latest'
+  #end
 
   # Every Vagrant virtual environment requires a box to build off of.
   # If this value is a shorthand to a box in Vagrant Cloud then
   # config.vm.box_url doesn't need to be specified.
-  config.vm.box = 'chef/ubuntu-14.04'
+  #config.vm.box = 'chef/ubuntu-14.04'
+  config.vm.box = 'debian7-dev-virtualbox-chef'
+#config.vm.box_url = "http://bit.ly/1weDdiJ"
+#config.vm.box_url = "http://localhost/box/ubuntu-14.04-dev-virtualbox-chef.box"
+config.vm.box_url = "http://10.0.0.78/box/dsi-debian-7-box"
+  config.vm.hostname = "tefenuaweb.a1a2.srv.gov.pf"
 
+  # Personalisation du provider : virtualbox
+  config.vm.provider "virtualbox" do |v|
+    v.gui = true
+    v.name = "frontal"
+    v.memory = 2048
+    v.cpus = 1
+  end
 
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :private_network, type: 'dhcp'
+  #config.vm.network :private_network, type: 'dhcp'
+  config.vm.network "private_network", ip: "192.168.0.5"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -75,11 +88,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.berkshelf.except = []
 
   config.vm.provision :chef_solo do |chef|
-    chef.json = {
-      mysql: {
-        server_root_password: 'rootpass',
-        server_debian_password: 'debpass',
-        server_repl_password: 'replpass'
+#    chef.cookbooks_path = [ "/home/silst/Projects/production/dsi-repo/cookbooks" ]
+#    chef.roles_path = "/home/silst/Projects/production/dsi-repo/roles"
+#    chef.data_bags_path = "/home/silst/Projects/production/data_bags"
+
+     chef.json = {
+      "chef-tefenua-frontal" => {
+           "frontal_svn_link" => "http://",
+           "user_svn" => "toto",
+           "passwd_svn" => "toto"
       }
     }
 
@@ -88,3 +105,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ]
   end
 end
+
