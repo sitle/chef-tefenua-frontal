@@ -94,9 +94,9 @@ config.vm.box_url = "http://10.0.0.78/box/dsi-debian-7-box"
 
      chef.json = {
       "chef-tefenua-frontal" => {
-           "frontal_svn_link" => "http://",
-           "user_svn" => "toto",
-           "passwd_svn" => "toto"
+           "frontal_svn_link" => "http://svn.dsi.gov.pf/svn/sig/PRODUCTION/Te%20Fenu@/frontal/donn%C3%A9e/tefenua",
+           "user_svn" => "sibem",
+           "passwd_svn" => "sibem"
       }
     }
 

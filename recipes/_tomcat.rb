@@ -27,19 +27,26 @@ include_recipe 'java::default'
 # Tomcat installation
 
 node.set['tomcat']['base_version'] = '7'
-node.set['tomcat']['user'] = 'tomcat7'
-node.set['tomcat']['group'] = 'tomcat7'
-node.set['tomcat']['home'] = '/usr/share/tomcat7'
-node.set['tomcat']['config_dir'] = '/etc/tomcat7'
-node.set['tomcat']['base'] = '/var/lib/tomcat7'
-node.set['tomcat']['config_dir'] = '/etc/tomcat7'
-node.set['tomcat']['log_dir'] = '/var/log/tomcat7'
-node.set['tomcat']['tmp_dir'] = '/tmp/tomcat7-tmp'
-node.set['tomcat']['work_dir'] = '/var/cache/tomcat7'
-node.set['tomcat']['webapp_dir'] = '/var/lib/tomcat7/webapps'
-node.set['tomcat']['keytool'] = '/usr/bin/keytool'
-node.set['tomcat']['java_options'] = '-Djava.awt.headless=true -Xms2G -Xmx2G -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m'
-include_recipe 'tomcat::default'
+version = node['tomcat']['base_version']
+node.default['tomcat']['java_options'] = '-server -Xms2096m -Xmx2096m -XX:MaxPermSize=256m -Djava.awt.headless=true'
+node.default['tomcat']['deploy_manager_packages'] = ["tomcat#{version}-admin"]
+node.default['tomcat']['base_instance'] = "tomcat#{version}"
+node.default['tomcat']['packages'] = ["tomcat#{version}"]
+node.default['tomcat']['user'] = "tomcat#{version}"
+node.default['tomcat']['group'] = "tomcat#{version}"
+node.default['tomcat']['home'] = "/usr/share/tomcat#{version}"
+node.default['tomcat']['base'] = "/var/lib/tomcat#{version}"
+node.default['tomcat']['config_dir'] = "/etc/tomcat#{version}"
+node.default['tomcat']['log_dir'] = "/var/log/tomcat#{version}"
+node.default['tomcat']['tmp_dir'] = "/tmp/tomcat#{version}-tmp"
+node.default['tomcat']['work_dir'] = "/var/cache/tomcat#{version}"
+node.default['tomcat']['context_dir'] = "#{node['tomcat']['config_dir']}/Catalina/localhost"
+node.default['tomcat']['webapp_dir'] = "/var/lib/tomcat#{version}/webapps"
+node.default['tomcat']['keytool'] = 'keytool'
+node.default['tomcat']['lib_dir'] = "#{node['tomcat']['home']}/lib"
+node.default['tomcat']['endorsed_dir'] = "#{node['tomcat']['lib_dir']}/endorsed"
+
+include_recipe 'tomcat::default' 
 
 service 'tomcat7' do
     supports status: true, restart: true, reload: true
