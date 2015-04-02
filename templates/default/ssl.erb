@@ -1,0 +1,35 @@
+<VirtualHost *:80>
+  ServerName <%= @external_name %>
+
+  Redirect / https:/<%= @external_name %>/
+
+  ErrorLog ${APACHE_LOG_DIR}/error-<%= @external_name %>.log
+  LogLevel warn
+  CustomLog ${APACHE_LOG_DIR}/access-<%= @external_name %>.log combined
+
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName  <%= @external_name %>
+
+  ErrorLog ${APACHE_LOG_DIR}/error-<%= @external_name %>-ssl.log
+  LogLevel warn
+  CustomLog ${APACHE_LOG_DIR}/access-<%= @external_name %>-ssl.log combined
+
+  <Proxy *>
+    Order Deny,Allow
+    Allow from all
+  </Proxy>
+
+  ProxyPass /<%= @application_name %> ajp://localhost:8009/<%= @application_name %>
+  ProxyPass / ajp://localhost:8009/<%= @application_name %>
+
+  SSLEngine on
+  SSLProxyEngine on
+  SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+  SSLCertificateFile "/etc/ssl/certs/<%= @crtkey %>"
+  SSLCertificateKeyFile "/etc/ssl/private/<%= @pemkey %>"
+  SSLCACertificateFile "/etc/ssl/certs/<%= @cakey %>"
+
+</VirtualHost>
+

@@ -40,3 +40,4 @@ bash 'chown_tefenua_directory' do
    EOH
    notifies :restart, 'service[tomcat7]'
 end
+include_recipe "chef-tefenua-frontal::_apache"

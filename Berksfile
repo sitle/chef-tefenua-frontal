@@ -4,3 +4,4 @@ metadata
 cookbook "apt"
 cookbook "java"
 cookbook "tomcat"
+cookbook "apache2"
